@@ -1,0 +1,113 @@
+.traveler-card {
+  background: #ffffff;
+  border-radius: 12px;
+  padding: 1.5rem;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  cursor: pointer;
+  font-family: 'Inter', sans-serif;
+  text-align: center;
+}
+
+.traveler-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+}
+
+.traveler-avatar {
+  width: 80px;
+  height: 80px;
+  margin: 0 auto 1rem;
+  border-radius: 50%;
+  overflow: hidden;
+  border: 3px solid #008080;
+}
+
+.traveler-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.traveler-info {
+  text-align: center;
+}
+
+.traveler-name {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #333333;
+  margin-bottom: 0.5rem;
+}
+
+.traveler-location {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  color: #666666;
+  font-size: 0.9rem;
+  margin-bottom: 0.75rem;
+}
+
+.traveler-rating {
+  margin-bottom: 1rem;
+}
+
+.rating-stars {
+  display: flex;
+  justify-content: center;
+  gap: 0.25rem;
+  margin-bottom: 0.5rem;
+}
+
+.rating-text {
+  font-size: 0.85rem;
+  color: #666666;
+}
+
+.traveler-stats {
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+  padding-top: 1rem;
+  border-top: 1px solid #e0e0e0;
+}
+
+.stat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.stat-number {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #008080;
+}
+
+.stat-label {
+  font-size: 0.8rem;
+  color: #666666;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+@media screen and (max-width: 768px) {
+  .traveler-card {
+    padding: 1.25rem;
+  }
+  
+  .traveler-avatar {
+    width: 70px;
+    height: 70px;
+  }
+  
+  .traveler-name {
+    font-size: 1.1rem;
+  }
+  
+  .traveler-stats {
+    gap: 1.5rem;
+  }
+}

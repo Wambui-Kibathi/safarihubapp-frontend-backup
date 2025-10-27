@@ -1,0 +1,187 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+
+.navbar {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  background-color: transparent;
+  backdrop-filter: blur(10px);
+  transition: all 0.3s ease;
+  z-index: 1000;
+  font-family: 'Poppins', sans-serif;
+}
+
+.navbar-scrolled {
+  background-color: rgba(255, 255, 255, 0.95);
+  box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
+}
+
+.navbar-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 70px;
+}
+
+.navbar-logo {
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: #00695C;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.navbar-logo:hover {
+  color: #004D40;
+}
+
+.navbar-menu {
+  display: flex;
+  align-items: center;
+  gap: 30px;
+}
+
+.navbar-link {
+  text-decoration: none;
+  color: #FFFFFF;
+  font-weight: 500;
+  font-size: 1rem;
+  padding: 8px 16px;
+  border-radius: 6px;
+  transition: all 0.3s ease;
+}
+
+.navbar-scrolled .navbar-link {
+  color: #212121;
+}
+
+.navbar-link:hover {
+  color: #00695C;
+  background-color: rgba(0, 105, 92, 0.1);
+}
+
+.navbar-auth {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  margin-left: 20px;
+}
+
+.navbar-login {
+  border: 1px solid #FFFFFF;
+}
+
+.navbar-scrolled .navbar-login {
+  border-color: #00695C;
+  color: #00695C;
+}
+
+.navbar-login:hover {
+  background-color: #00695C;
+  color: #FFFFFF;
+  border-color: #00695C;
+}
+
+.navbar-register {
+  background-color: #00695C;
+  color: #FFFFFF;
+  border: 1px solid #00695C;
+}
+
+.navbar-register:hover {
+  background-color: #004D40;
+  border-color: #004D40;
+}
+
+.navbar-toggle {
+  display: none;
+  font-size: 1.8rem;
+  color: #FFFFFF;
+  cursor: pointer;
+  padding: 5px;
+  border-radius: 4px;
+  transition: color 0.3s ease;
+}
+
+.navbar-scrolled .navbar-toggle {
+  color: #212121;
+}
+
+.navbar-toggle:hover {
+  color: #00695C;
+}
+
+@media screen and (max-width: 768px) {
+  .navbar-container {
+    padding: 0 15px;
+    height: 60px;
+  }
+
+  .navbar-logo {
+    font-size: 1.5rem;
+  }
+
+  .navbar-menu {
+    position: fixed;
+    top: 60px;
+    left: -100%;
+    width: 100%;
+    height: calc(100vh - 60px);
+    background-color: rgba(255, 255, 255, 0.98);
+    backdrop-filter: blur(20px);
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    padding-top: 50px;
+    gap: 25px;
+    transition: left 0.3s ease;
+  }
+
+  .navbar-menu-active {
+    left: 0;
+  }
+
+  .navbar-menu .navbar-link {
+    color: #212121;
+    font-size: 1.1rem;
+    padding: 12px 20px;
+    width: 200px;
+    text-align: center;
+  }
+
+  .navbar-auth {
+    flex-direction: column;
+    margin-left: 0;
+    margin-top: 20px;
+    gap: 20px;
+  }
+
+  .navbar-login,
+  .navbar-register {
+    width: 200px;
+    text-align: center;
+    padding: 12px 20px;
+  }
+
+  .navbar-menu .navbar-login {
+    border-color: #00695C;
+    color: #00695C;
+  }
+
+  .navbar-toggle {
+    display: block;
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .navbar-container {
+    padding: 0 10px;
+  }
+
+  .navbar-logo {
+    font-size: 1.3rem;
+  }
+}

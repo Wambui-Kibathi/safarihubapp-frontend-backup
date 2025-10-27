@@ -1,0 +1,427 @@
+.guide-profile {
+  min-height: 100vh;
+  background-color: #F5F5F5;
+  padding-top: 80px;
+}
+
+.profile-container {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 40px 20px;
+}
+
+.profile-header {
+  text-align: center;
+  margin-bottom: 50px;
+}
+
+.profile-title {
+  font-size: 2.8rem;
+  color: #00695C;
+  font-weight: 700;
+  margin-bottom: 15px;
+}
+
+.profile-subtitle {
+  font-size: 1.2rem;
+  color: #666666;
+}
+
+.profile-content {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 40px;
+}
+
+.profile-card,
+.subscription-card {
+  background-color: #FFFFFF;
+  border-radius: 15px;
+  padding: 40px;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+}
+
+.profile-card {
+  display: flex;
+  gap: 40px;
+  align-items: flex-start;
+}
+
+.profile-avatar {
+  flex-shrink: 0;
+}
+
+.avatar-circle {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  background-color: #00695C;
+  color: #FFFFFF;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2.5rem;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.profile-info {
+  flex: 1;
+}
+
+.info-group {
+  margin-bottom: 25px;
+}
+
+.info-group label {
+  display: block;
+  font-weight: 600;
+  color: #333333;
+  margin-bottom: 8px;
+  font-size: 1rem;
+}
+
+.info-group p {
+  color: #666666;
+  font-size: 1.1rem;
+  margin: 0;
+  padding: 10px 0;
+  border-bottom: 1px solid #E0E0E0;
+}
+
+.form-group {
+  margin-bottom: 25px;
+}
+
+.form-group label {
+  display: block;
+  font-weight: 600;
+  color: #333333;
+  margin-bottom: 8px;
+  font-size: 1rem;
+}
+
+.form-group input {
+  width: 100%;
+  padding: 12px 15px;
+  border: 2px solid #E0E0E0;
+  border-radius: 8px;
+  font-size: 1rem;
+  transition: border-color 0.3s ease;
+  font-family: inherit;
+}
+
+.form-group input:focus {
+  outline: none;
+  border-color: #00695C;
+}
+
+.edit-button {
+  background-color: #00695C;
+  color: #FFFFFF;
+  border: none;
+  padding: 12px 25px;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  margin-top: 20px;
+}
+
+.edit-button:hover {
+  background-color: #004D40;
+  transform: translateY(-2px);
+}
+
+.form-actions {
+  display: flex;
+  gap: 15px;
+  margin-top: 30px;
+}
+
+.save-button {
+  background-color: #F9A825;
+  color: #FFFFFF;
+  border: none;
+  padding: 12px 25px;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.save-button:hover {
+  background-color: #FFB74D;
+  transform: translateY(-2px);
+}
+
+.cancel-button {
+  background-color: #666666;
+  color: #FFFFFF;
+  border: none;
+  padding: 12px 25px;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.cancel-button:hover {
+  background-color: #555555;
+  transform: translateY(-2px);
+}
+
+.subscription-title {
+  font-size: 1.5rem;
+  color: #00695C;
+  font-weight: 600;
+  margin-bottom: 25px;
+}
+
+.plan-current {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+.plan-name {
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: #F9A825;
+  background-color: #FFF8E1;
+  padding: 8px 16px;
+  border-radius: 20px;
+}
+
+.plan-price {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #333333;
+}
+
+.next-billing {
+  color: #666666;
+  margin-bottom: 25px;
+  font-size: 0.95rem;
+}
+
+.plan-features h4 {
+  color: #333333;
+  margin-bottom: 15px;
+  font-size: 1rem;
+}
+
+.plan-features ul {
+  list-style: none;
+  padding: 0;
+  margin-bottom: 30px;
+}
+
+.plan-features li {
+  color: #666666;
+  margin-bottom: 8px;
+  padding-left: 20px;
+  position: relative;
+}
+
+.plan-features li::before {
+  content: "✓";
+  color: #00695C;
+  font-weight: bold;
+  position: absolute;
+  left: 0;
+}
+
+.payment-button {
+  width: 100%;
+  background-color: #F9A825;
+  color: #FFFFFF;
+  border: none;
+  padding: 15px;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.payment-button:hover {
+  background-color: #FFB74D;
+  transform: translateY(-2px);
+}
+
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.payment-modal {
+  background-color: #FFFFFF;
+  border-radius: 15px;
+  width: 90%;
+  max-width: 500px;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 25px;
+  border-bottom: 1px solid #E0E0E0;
+}
+
+.modal-header h2 {
+  color: #00695C;
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin: 0;
+}
+
+.close-button {
+  background: none;
+  border: none;
+  font-size: 2rem;
+  color: #666666;
+  cursor: pointer;
+  padding: 0;
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.close-button:hover {
+  color: #00695C;
+}
+
+.modal-content {
+  padding: 25px;
+}
+
+.modal-content p {
+  color: #666666;
+  margin-bottom: 25px;
+  font-size: 1rem;
+}
+
+.payment-form {
+  margin-bottom: 25px;
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 15px;
+}
+
+.confirm-payment {
+  width: 100%;
+  background-color: #00695C;
+  color: #FFFFFF;
+  border: none;
+  padding: 15px;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 1.1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.confirm-payment:hover {
+  background-color: #004D40;
+  transform: translateY(-2px);
+}
+
+@media screen and (max-width: 768px) {
+  .guide-profile {
+    padding-top: 70px;
+  }
+
+  .profile-container {
+    padding: 30px 15px;
+  }
+
+  .profile-title {
+    font-size: 2.2rem;
+  }
+
+  .profile-subtitle {
+    font-size: 1.1rem;
+  }
+
+  .profile-content {
+    grid-template-columns: 1fr;
+    gap: 30px;
+  }
+
+  .profile-card {
+    flex-direction: column;
+    align-items: center;
+    gap: 30px;
+  }
+
+  .avatar-circle {
+    width: 100px;
+    height: 100px;
+    font-size: 2rem;
+  }
+
+  .profile-info {
+    width: 100%;
+  }
+
+  .form-actions {
+    flex-direction: column;
+  }
+
+  .save-button,
+  .cancel-button,
+  .edit-button {
+    width: 100%;
+  }
+
+  .payment-modal {
+    width: 95%;
+    margin: 20px;
+  }
+
+  .modal-header,
+  .modal-content {
+    padding: 20px;
+  }
+
+  .form-row {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .profile-title {
+    font-size: 1.8rem;
+  }
+
+  .profile-card,
+  .subscription-card {
+    padding: 25px 20px;
+  }
+
+  .avatar-circle {
+    width: 80px;
+    height: 80px;
+    font-size: 1.5rem;
+  }
+}

@@ -1,0 +1,241 @@
+.guide-bookings {
+  min-height: 100vh;
+  background-color: #F5F5F5;
+  padding-top: 80px;
+}
+
+.bookings-container {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 40px 20px;
+}
+
+.bookings-header {
+  text-align: center;
+  margin-bottom: 50px;
+}
+
+.bookings-title {
+  font-size: 2.8rem;
+  color: #00695C;
+  font-weight: 700;
+  margin-bottom: 15px;
+}
+
+.bookings-subtitle {
+  font-size: 1.2rem;
+  color: #666666;
+}
+
+.bookings-list {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.booking-card {
+  background-color: #FFFFFF;
+  border-radius: 15px;
+  padding: 25px;
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+  transition: all 0.3s ease;
+  border-left: 5px solid #00695C;
+}
+
+.booking-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.12);
+}
+
+.booking-main {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.booking-info {
+  flex: 1;
+}
+
+.booking-trip-title {
+  font-size: 1.4rem;
+  color: #212121;
+  font-weight: 600;
+  margin-bottom: 20px;
+}
+
+.traveler-info {
+  margin-bottom: 20px;
+}
+
+.traveler-details {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.traveler-name,
+.traveler-email,
+.traveler-count {
+  color: #666666;
+  font-size: 0.95rem;
+  display: flex;
+  align-items: center;
+}
+
+.traveler-name {
+  font-weight: 600;
+  color: #333333;
+}
+
+.booking-dates {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  color: #666666;
+  font-size: 0.9rem;
+}
+
+.booking-date,
+.trip-date,
+.trip-duration {
+  display: flex;
+  align-items: center;
+}
+
+.booking-meta {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 15px;
+}
+
+.booking-price {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #F9A825;
+}
+
+.booking-status {
+  padding: 8px 16px;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.booking-status.confirmed {
+  background-color: #E8F5E8;
+  color: #2E7D32;
+}
+
+.booking-status.pending {
+  background-color: #FFF3E0;
+  color: #F57C00;
+}
+
+.booking-status.completed {
+  background-color: #E3F2FD;
+  color: #1976D2;
+}
+
+.no-bookings {
+  text-align: center;
+  padding: 80px 20px;
+  background-color: #FFFFFF;
+  border-radius: 15px;
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+}
+
+.no-bookings p {
+  color: #666666;
+  font-size: 1.2rem;
+  font-style: italic;
+}
+
+@media screen and (max-width: 768px) {
+  .guide-bookings {
+    padding-top: 70px;
+  }
+
+  .bookings-container {
+    padding: 30px 15px;
+  }
+
+  .bookings-title {
+    font-size: 2.2rem;
+  }
+
+  .bookings-subtitle {
+    font-size: 1.1rem;
+  }
+
+  .booking-card {
+    padding: 20px;
+  }
+
+  .booking-main {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 20px;
+  }
+
+  .booking-meta {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+  }
+
+  .traveler-details {
+    gap: 6px;
+  }
+
+  .booking-dates {
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .booking-trip-title {
+    font-size: 1.2rem;
+    margin-bottom: 15px;
+  }
+
+  .booking-price {
+    font-size: 1.3rem;
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .bookings-title {
+    font-size: 1.8rem;
+  }
+
+  .booking-card {
+    padding: 15px;
+  }
+
+  .traveler-details {
+    font-size: 0.9rem;
+  }
+
+  .booking-dates {
+    font-size: 0.85rem;
+  }
+
+  .booking-meta {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 15px;
+  }
+
+  .booking-status {
+    padding: 6px 12px;
+    font-size: 0.8rem;
+  }
+
+  .no-bookings {
+    padding: 60px 15px;
+  }
+}

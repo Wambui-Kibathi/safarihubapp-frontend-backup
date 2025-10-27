@@ -1,0 +1,30 @@
+.main-layout {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background-color: var(--background);
+  color: var(--text-dark);
+  font-family: 'Poppins', sans-serif;
+}
+
+.main-content {
+  flex: 1;
+  padding-top: 20px;
+  padding-bottom: 20px;
+}
+
+/* Light theme (default) */
+.main-layout.light {
+  background-color: var(--background);
+  color: var(--text-dark);
+}
+
+/* Dark theme */
+.main-layout.dark {
+  background-color: #1a1a1a;
+  color: var(--text-light);
+}
+
+.main-layout.dark .main-content {
+  background-color: #1a1a1a;
+}

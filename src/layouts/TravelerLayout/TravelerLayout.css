@@ -1,0 +1,38 @@
+.traveler-layout {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background-color: var(--background);
+  color: var(--text-dark);
+  font-family: 'Poppins', sans-serif;
+}
+
+.traveler-content {
+  flex: 1;
+  padding-top: 80px;
+  padding-bottom: 20px;
+  margin-top: 0;
+  border-top: 3px solid #008080;
+}
+
+.traveler-layout::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, #008080, #f4a261);
+  z-index: 1001;
+}
+
+@media screen and (max-width: 768px) {
+  .traveler-content {
+    padding-top: 70px;
+    margin-top: 0;
+  }
+  
+  .traveler-layout {
+    position: relative;
+  }
+}
