@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './Contact.css';
+import axios from 'axios';
 
 const Contact = () => {
   const [formData, setFormData] = useState({
@@ -7,7 +8,10 @@ const Contact = () => {
     email: '',
     message: ''
   });
+  const [mapUrl, setMapUrl] = useState(null);
+  const [statusMessage, setStatusMessage] = useState('');
 
+  // Handle input change
   const handleChange = (e) => {
     setFormData({
       ...formData,
@@ -15,11 +19,40 @@ const Contact = () => {
     });
   };
 
-  const handleSubmit = (e) => {
+  // Handle form submission (connects to Flask backend)
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log('Form submitted:', formData);
-    // Handle form submission here
+    setStatusMessage('');
+
+    try {
+      const res = await axios.post('http://127.0.0.1:5000/contact', formData);
+      if (res.status === 201 || res.status === 200) {
+        setStatusMessage('Message sent successfully!');
+        setFormData({ name: '', email: '', message: '' });
+      } else {
+        setStatusMessage('Something went wrong. Please try again.');
+      }
+    } catch (err) {
+      console.error('Error sending message:', err);
+      setStatusMessage('Failed to send message. Please check your connection.');
+    }
   };
+
+  // Fetch the static map URL from Flask backend
+  useEffect(() => {
+    const fetchMap = async () => {
+      try {
+        const res = await fetch('http://127.0.0.1:5000/api/contact/map');
+        const data = await res.json();
+        if (data.map_url) {
+          setMapUrl(data.map_url);
+        }
+      } catch (err) {
+        console.error('Error fetching map URL:', err);
+      }
+    };
+    fetchMap();
+  }, []);
 
   return (
     <div className="contact">
@@ -28,6 +61,7 @@ const Contact = () => {
         <p className="contact-subtitle">Get in touch with our team</p>
         
         <div className="contact-content">
+          {/* Contact Form */}
           <div className="contact-form-section">
             <form className="contact-form" onSubmit={handleSubmit}>
               <div className="form-group">
@@ -69,9 +103,15 @@ const Contact = () => {
               <button type="submit" className="submit-button">
                 Send Message
               </button>
+              {statusMessage && (
+                <p style={{ marginTop: '15px', color: '#00695C', fontWeight: '500' }}>
+                  {statusMessage}
+                </p>
+              )}
             </form>
           </div>
-          
+
+          {/* Contact Info + Static Map */}
           <div className="contact-info-section">
             <div className="contact-info">
               <h3>Get In Touch</h3>
@@ -88,12 +128,16 @@ const Contact = () => {
                 <p>Nairobi, Kenya<br />East Africa</p>
               </div>
             </div>
-            
-            <div className="map-placeholder">
-              <div className="map-content">
-                <p>Interactive Map</p>
-                <small>Nairobi, Kenya</small>
-              </div>
+
+            <div className="map-section">
+              {mapUrl ? (
+                <>
+                  <img src={mapUrl} alt="SafariHub Location" />
+                  <p className="map-caption">SafariHub – Nairobi, Kenya</p>
+                </>
+              ) : (
+                <p>Loading map...</p>
+              )}
             </div>
           </div>
         </div>

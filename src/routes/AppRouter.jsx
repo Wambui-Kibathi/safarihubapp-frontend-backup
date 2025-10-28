@@ -17,6 +17,7 @@ import About from '@/pages/shared/About/About';
 import Contact from '@/pages/shared/Contact/Contact';
 import Login from '@/pages/shared/Login/Login';
 import Register from '@/pages/shared/Register/Register';
+import DestinationsPage from '@/pages/shared/DestinationsPage/DestinationsPage';
 
 // Traveler Pages
 import TravelerDashboard from '@/pages/traveler/TravelerDashboard/TravelerDashboard';
@@ -74,6 +75,14 @@ const AppRouter = () => {
             <Footer />
           </MainLayout>
         } />
+        
+        <Route path="/destinations" element={
+          <MainLayout>
+            <Navbar />
+            <DestinationsPage />
+            <Footer />
+          </MainLayout>
+        } /> 
 
         {/* Protected Traveler Routes */}
         <Route path="/traveler/dashboard" element={

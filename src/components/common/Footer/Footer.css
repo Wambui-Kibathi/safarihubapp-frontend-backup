@@ -1,7 +1,7 @@
 .footer {
   background-color: #00695C;
   color: #FFFFFF;
-  padding: 50px 0 20px;
+  padding: 50px 0 0;
   margin-top: auto;
 }
 
@@ -88,7 +88,7 @@
 
 .footer-bottom {
   border-top: 1px solid rgba(255, 255, 255, 0.2);
-  padding-top: 20px;
+  padding: 20px 0;
   text-align: center;
 }
 
@@ -100,7 +100,7 @@
 
 @media screen and (max-width: 768px) {
   .footer {
-    padding: 40px 0 20px;
+    padding: 40px 0 0;
   }
 
   .footer-container {

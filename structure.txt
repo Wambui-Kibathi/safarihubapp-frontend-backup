@@ -1,0 +1,59 @@
+.
+├── README.md
+├── eslint.config.js
+├── index.html
+├── package-lock.json
+├── package.json
+├── public
+│   ├── favicon.ico
+│   ├── index.html
+│   └── vite.svg
+├── src
+│   ├── App.css
+│   ├── App.jsx
+│   ├── api
+│   │   ├── authApi.js
+│   │   ├── guideApi.js
+│   │   ├── paymentApi.js
+│   │   └── travelerApi.js
+│   ├── assets
+│   │   ├── icons
+│   │   ├── images
+│   │   └── logos
+│   ├── components
+│   │   ├── common
+│   │   ├── guide
+│   │   ├── payments
+│   │   └── traveler
+│   ├── context
+│   │   ├── AuthContext.jsx
+│   │   ├── PaymentContext.jsx
+│   │   └── ThemeContext.jsx
+│   ├── icons
+│   │   ├── CommonIcons.jsx
+│   │   └── PaymentIcons.jsx
+│   ├── index.css
+│   ├── index.js
+│   ├── layouts
+│   │   ├── GuideLayout
+│   │   ├── MainLayout
+│   │   └── TravelerLayout
+│   ├── main.jsx
+│   ├── pages
+│   │   ├── guide
+│   │   ├── shared
+│   │   └── traveler
+│   ├── routes
+│   │   ├── AppRouter.jsx
+│   │   └── PrivateRoutes.jsx
+│   ├── styles
+│   │   ├── globals.css
+│   │   └── pages.css
+│   └── utils
+│       ├── constants.js
+│       ├── helpers.js
+│       └── paymentUtils.js
+├── structure.txt
+└── vite.config.js
+
+26 directories, 31 files
