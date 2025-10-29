@@ -1,7 +1,6 @@
 import api from './api';
 
 const adminApi = {
-  // User Management
   getUsers: async () => {
     try {
       const response = await api.get('/admin/users');
@@ -23,35 +22,6 @@ const adminApi = {
     }
   },
 
-  // Destination Management
-  createDestination: async (destinationData) => {
-    try {
-      const response = await api.post('/destinations', destinationData);
-      return response.data;
-    } catch (error) {
-      throw error.response?.data?.error || 'Failed to create destination';
-    }
-  },
-
-  updateDestination: async (destinationId, destinationData) => {
-    try {
-      const response = await api.put(`/destinations/${destinationId}`, destinationData);
-      return response.data;
-    } catch (error) {
-      throw error.response?.data?.error || 'Failed to update destination';
-    }
-  },
-
-  deleteDestination: async (destinationId) => {
-    try {
-      const response = await api.delete(`/destinations/${destinationId}`);
-      return response.data;
-    } catch (error) {
-      throw error.response?.data?.error || 'Failed to delete destination';
-    }
-  },
-
-  // Booking Management
   getBookings: async () => {
     try {
       const response = await api.get('/admin/bookings');
@@ -61,16 +31,6 @@ const adminApi = {
     }
   },
 
-  updateBookingStatus: async (bookingId, status) => {
-    try {
-      const response = await api.patch(`/bookings/${bookingId}/status`, { status });
-      return response.data;
-    } catch (error) {
-      throw error.response?.data?.error || 'Failed to update booking status';
-    }
-  },
-
-  // Analytics
   getDashboardStats: async () => {
     try {
       const response = await api.get('/admin/dashboard/stats');

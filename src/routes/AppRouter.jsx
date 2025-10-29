@@ -1,5 +1,6 @@
 import React from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { useAuth } from '@/context/AuthContext';
 
 // Layouts
 import MainLayout from '@/layouts/MainLayout/MainLayout';
@@ -7,8 +8,6 @@ import TravelerLayout from '@/layouts/TravelerLayout/TravelerLayout';
 import GuideLayout from '@/layouts/GuideLayout/GuideLayout';
 
 // Components
-import Navbar from '@/components/common/Navbar/Navbar';
-import Footer from '@/components/common/Footer/Footer';
 import ProtectedRoute from './PrivateRoutes';
 
 // Shared Pages
@@ -18,137 +17,137 @@ import Contact from '@/pages/shared/Contact/Contact';
 import Login from '@/pages/shared/Login/Login';
 import Register from '@/pages/shared/Register/Register';
 import DestinationsPage from '@/pages/shared/DestinationsPage/DestinationsPage';
+import UserProfile from '@/pages/shared/UserProfile/UserProfile'; // Single profile for all
+
+// NEW: Admin Pages
+import AdminDashboard from '@/pages/admin/AdminDashboard';
 
 // Traveler Pages
 import TravelerDashboard from '@/pages/traveler/TravelerDashboard/TravelerDashboard';
 import TravelerExplore from '@/pages/traveler/TravelerExplore/TravelerExplore';
 import TravelerBookings from '@/pages/traveler/TravelerBookings/TravelerBookings';
-import TravelerProfile from '@/pages/traveler/TravelerProfile/TravelerProfile';
 
 // Guide Pages
 import GuideDashboard from '@/pages/guide/GuideDashboard/GuideDashboard';
 import GuideTrips from '@/pages/guide/GuideTrips/GuideTrips';
 import GuideBookings from '@/pages/guide/GuideBookings/GuideBookings';
-import GuideProfile from '@/pages/guide/GuideProfile/GuideProfile';
 
 const AppRouter = () => {
+  const { user, isAuthenticated } = useAuth();
+
+  // Enhanced ProtectedRoute with role checking
+  const RoleProtectedRoute = ({ children, requiredRole }) => {
+    if (!isAuthenticated) {
+      return <Navigate to="/login" replace />;
+    }
+    
+    if (requiredRole && user?.role !== requiredRole) {
+      return <Navigate to="/" replace />;
+    }
+    
+    return children;
+  };
+
   return (
     <BrowserRouter>
       <Routes>
-        {/* Public Routes with Navbar and Footer */}
-        <Route path="/" element={
-          <MainLayout>
-            <Navbar />
-            <Home />
-            <Footer />
-          </MainLayout>
-        } />
-        
-        <Route path="/about" element={
-          <MainLayout>
-            <Navbar />
-            <About />
-            <Footer />
-          </MainLayout>
-        } />
-        
-        <Route path="/contact" element={
-          <MainLayout>
-            <Navbar />
-            <Contact />
-            <Footer />
-          </MainLayout>
-        } />
-        
-        <Route path="/login" element={
-          <MainLayout>
-            <Navbar />
-            <Login />
-            <Footer />
-          </MainLayout>
-        } />
-        
-        <Route path="/register" element={
-          <MainLayout>
-            <Navbar />
-            <Register />
-            <Footer />
-          </MainLayout>
-        } />
-        
-        <Route path="/destinations" element={
-          <MainLayout>
-            <Navbar />
-            <DestinationsPage />
-            <Footer />
-          </MainLayout>
-        } /> 
+        {/* Public Routes with MainLayout (Navbar & Footer included in MainLayout) */}
+        <Route path="/" element={<MainLayout><Home /></MainLayout>} />
+        <Route path="/about" element={<MainLayout><About /></MainLayout>} />
+        <Route path="/contact" element={<MainLayout><Contact /></MainLayout>} />
+        <Route path="/destinations" element={<MainLayout><DestinationsPage /></MainLayout>} />
+        <Route path="/login" element={<MainLayout><Login /></MainLayout>} />
+        <Route path="/register" element={<MainLayout><Register /></MainLayout>} />
 
-        {/* Protected Traveler Routes */}
-        <Route path="/traveler/dashboard" element={
-          <ProtectedRoute userType="traveler">
-            <TravelerLayout>
-              <TravelerDashboard />
-            </TravelerLayout>
-          </ProtectedRoute>
-        } />
-        
-        <Route path="/traveler/explore" element={
-          <ProtectedRoute userType="traveler">
-            <TravelerLayout>
-              <TravelerExplore />
-            </TravelerLayout>
-          </ProtectedRoute>
-        } />
-        
-        <Route path="/traveler/bookings" element={
-          <ProtectedRoute userType="traveler">
-            <TravelerLayout>
-              <TravelerBookings />
-            </TravelerLayout>
-          </ProtectedRoute>
-        } />
-        
-        <Route path="/traveler/profile" element={
-          <ProtectedRoute userType="traveler">
-            <TravelerLayout>
-              <TravelerProfile />
-            </TravelerLayout>
-          </ProtectedRoute>
-        } />
+        {/* Shared Profile Route (for all authenticated users) */}
+        <Route 
+          path="/profile" 
+          element={
+            <RoleProtectedRoute>
+              <MainLayout>
+                <UserProfile />
+              </MainLayout>
+            </RoleProtectedRoute>
+          } 
+        />
 
-        {/* Protected Guide Routes */}
-        <Route path="/guide/dashboard" element={
-          <ProtectedRoute userType="guide">
-            <GuideLayout>
-              <GuideDashboard />
-            </GuideLayout>
-          </ProtectedRoute>
-        } />
+        {/* NEW: Admin Routes */}
+        <Route 
+          path="/admin/*" 
+          element={
+            <RoleProtectedRoute requiredRole="admin">
+              <AdminDashboard />
+            </RoleProtectedRoute>
+          } 
+        />
+
+        {/* Traveler Routes */}
+        <Route 
+          path="/traveler/dashboard" 
+          element={
+            <RoleProtectedRoute requiredRole="traveler">
+              <TravelerLayout>
+                <TravelerDashboard />
+              </TravelerLayout>
+            </RoleProtectedRoute>
+          } 
+        />
         
-        <Route path="/guide/trips" element={
-          <ProtectedRoute userType="guide">
-            <GuideLayout>
-              <GuideTrips />
-            </GuideLayout>
-          </ProtectedRoute>
-        } />
+        <Route 
+          path="/traveler/explore" 
+          element={
+            <RoleProtectedRoute requiredRole="traveler">
+              <TravelerLayout>
+                <TravelerExplore />
+              </TravelerLayout>
+            </RoleProtectedRoute>
+          } 
+        />
         
-        <Route path="/guide/bookings" element={
-          <ProtectedRoute userType="guide">
-            <GuideLayout>
-              <GuideBookings />
-            </GuideLayout>
-          </ProtectedRoute>
-        } />
+        <Route 
+          path="/traveler/bookings" 
+          element={
+            <RoleProtectedRoute requiredRole="traveler">
+              <TravelerLayout>
+                <TravelerBookings />
+              </TravelerLayout>
+            </RoleProtectedRoute>
+          } 
+        />
+
+        {/* Guide Routes */}
+        <Route 
+          path="/guide/dashboard" 
+          element={
+            <RoleProtectedRoute requiredRole="guide">
+              <GuideLayout>
+                <GuideDashboard />
+              </GuideLayout>
+            </RoleProtectedRoute>
+          } 
+        />
         
-        <Route path="/guide/profile" element={
-          <ProtectedRoute userType="guide">
-            <GuideLayout>
-              <GuideProfile />
-            </GuideLayout>
-          </ProtectedRoute>
-        } />
+        <Route 
+          path="/guide/trips" 
+          element={
+            <RoleProtectedRoute requiredRole="guide">
+              <GuideLayout>
+                <GuideTrips />
+              </GuideLayout>
+            </RoleProtectedRoute>
+          } 
+        />
+        
+        <Route 
+          path="/guide/bookings" 
+          element={
+            <RoleProtectedRoute requiredRole="guide">
+              <GuideLayout>
+                <GuideBookings />
+              </GuideLayout>
+            </RoleProtectedRoute>
+          } 
+        />
 
         {/* Catch all undefined routes */}
         <Route path="*" element={<Navigate to="/" replace />} />

@@ -1,19 +1,16 @@
-import React, { useContext } from 'react';
-import { Outlet } from 'react-router-dom';
+import React from 'react';
 import Navbar from '@/components/common/Navbar/Navbar';
 import Footer from '@/components/common/Footer/Footer';
-import { ThemeContext } from '@/context/ThemeContext';
 import './MainLayout.css';
 
 const MainLayout = ({ children }) => {
-  const { theme } = useContext(ThemeContext) || { theme: 'light' };
-
   return (
-    <div className={`main-layout ${theme}`}>
+    <div className="main-layout">
       <Navbar />
       <main className="main-content">
-        {children || <Outlet />}
+        {children}
       </main>
+      <Footer />
     </div>
   );
 };

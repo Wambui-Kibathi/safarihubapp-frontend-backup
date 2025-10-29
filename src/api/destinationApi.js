@@ -1,4 +1,4 @@
-import api from '../utils/api';
+import api from './api';
 
 const destinationApi = {
   getAllDestinations: async () => {
@@ -19,12 +19,13 @@ const destinationApi = {
     }
   },
 
-  getPopularDestinations: async () => {
-    try destinationApi.getDestinationsByCategory('popular');
-  },
-
-  getInternationalDestinations: async () => {
-    return destinationApi.getDestinationsByCategory('international');
+  getDestination: async (id) => {
+    try {
+      const response = await api.get(`/destinations/${id}`);
+      return response.data;
+    } catch (error) {
+      throw error.response?.data?.error || 'Failed to fetch destination';
+    }
   },
 
   createDestination: async (destinationData) => {

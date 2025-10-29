@@ -1,5 +1,5 @@
-import React, { createContext, useContext, useState, useEffect } from 'react';
-import authApi from '@/api/authApi';
+import React, { createContext, useState, useContext, useEffect } from 'react';
+import authApi from '../api/authApi';
 
 const AuthContext = createContext();
 
@@ -12,68 +12,85 @@ export const useAuth = () => {
 };
 
 export const AuthProvider = ({ children }) => {
-  const [currentUser, setCurrentUser] = useState(null);
+  const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
   useEffect(() => {
+    checkAuthStatus();
+  }, []);
+
+  const checkAuthStatus = () => {
     const token = localStorage.getItem('token');
-    const user = localStorage.getItem('user');
+    const userData = localStorage.getItem('user');
     
-    if (token && user) {
-      setCurrentUser(JSON.parse(user));
-      setIsAuthenticated(true);
+    if (token && userData) {
+      try {
+        setUser(JSON.parse(userData));
+        setIsAuthenticated(true);
+      } catch (error) {
+        console.error('Error parsing user data:', error);
+        logout();
+      }
     }
     setLoading(false);
-  }, []);
+  };
 
   const login = async (credentials) => {
     try {
       const response = await authApi.login(credentials);
-      const { user, token } = response;
+      const { token, user: userData } = response;
       
       localStorage.setItem('token', token);
-      localStorage.setItem('user', JSON.stringify(user));
+      localStorage.setItem('user', JSON.stringify(userData));
       
-      setCurrentUser(user);
+      setUser(userData);
       setIsAuthenticated(true);
       
-      return response;
+      return { success: true, user: userData };
     } catch (error) {
-      throw error;
+      return { success: false, error: error.message };
     }
   };
 
   const register = async (userData) => {
     try {
       const response = await authApi.register(userData);
-      return response;
+      const { token, user: newUser } = response;
+      
+      localStorage.setItem('token', token);
+      localStorage.setItem('user', JSON.stringify(newUser));
+      
+      setUser(newUser);
+      setIsAuthenticated(true);
+      
+      return { success: true, user: newUser };
     } catch (error) {
-      throw error;
+      return { success: false, error: error.message };
     }
   };
 
-  const logout = async () => {
-    try {
-      await authApi.logout();
-    } catch (error) {
-      console.error('Logout error:', error);
-    } finally {
-      localStorage.removeItem('token');
-      localStorage.removeItem('user');
-      setCurrentUser(null);
-      setIsAuthenticated(false);
-    }
+  const logout = () => {
+    localStorage.removeItem('token');
+    localStorage.removeItem('user');
+    setUser(null);
+    setIsAuthenticated(false);
+    authApi.logout(); // Call backend logout if needed
+  };
+
+  const updateUser = (updatedUser) => {
+    setUser(updatedUser);
+    localStorage.setItem('user', JSON.stringify(updatedUser));
   };
 
   const value = {
-    currentUser,
+    user,
+    loading,
+    isAuthenticated,
     login,
     register,
     logout,
-    loading,
-    isAuthenticated,
-    user: currentUser
+    updateUser
   };
 
   return (
@@ -82,5 +99,3 @@ export const AuthProvider = ({ children }) => {
     </AuthContext.Provider>
   );
 };
-
-export { AuthContext };
