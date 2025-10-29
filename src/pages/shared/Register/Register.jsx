@@ -1,8 +1,11 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { useAuth } from '../../../context/AuthContext';
 import './Register.css';
 
 const Register = () => {
+  const navigate = useNavigate();
+  const { register } = useAuth();
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -10,6 +13,8 @@ const Register = () => {
     confirmPassword: '',
     role: 'Traveler'
   });
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
 
   const handleChange = (e) => {
     setFormData({
@@ -18,10 +23,63 @@ const Register = () => {
     });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log('Register submitted:', formData);
-    // Handle registration logic here
+    setError('');
+
+    // Validate passwords match
+    if (formData.password !== formData.confirmPassword) {
+      setError('Passwords do not match');
+      return;
+    }
+
+    // Validate password length
+    if (formData.password.length < 6) {
+      setError('Password must be at least 6 characters long');
+      return;
+    }
+
+    setLoading(true);
+
+    try {
+      const data = {
+        full_name: formData.name,
+        email: formData.email,
+        password: formData.password,
+        role: formData.role.toLowerCase()
+      };
+
+      const response = await fetch('http://localhost:5000/api/auth/register', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
+      });
+
+      const result = await response.json();
+
+      if (!response.ok) {
+        throw new Error(result.message || 'Registration failed');
+      }
+
+      // Use the auth context register method
+      await register({
+        email: formData.email,
+        password: formData.password
+      });
+
+      // Redirect based on role
+      if (formData.role.toLowerCase() === 'guide') {
+        navigate('/guide/dashboard');
+      } else {
+        navigate('/traveler/dashboard');
+      }
+    } catch (error) {
+      setError(error.message);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -93,8 +151,10 @@ const Register = () => {
             </select>
           </div>
           
-          <button type="submit" className="register-button">
-            Register
+          {error && <div className="error-message">{error}</div>}
+
+          <button type="submit" className="register-button" disabled={loading}>
+            {loading ? 'Registering...' : 'Register'}
           </button>
         </form>
         
