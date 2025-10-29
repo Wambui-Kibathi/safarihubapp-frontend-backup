@@ -1,13 +1,58 @@
-import axios from "axios";
+import api from '../utils/api';
 
-const API_URL = "http://127.0.0.1:5000/destinations";
+const destinationApi = {
+  getAllDestinations: async () => {
+    try {
+      const response = await api.get('/destinations');
+      return response.data;
+    } catch (error) {
+      throw error.response?.data?.error || 'Failed to fetch destinations';
+    }
+  },
 
-export const getAllDestinations = async () => {
-  try {
-    const response = await axios.get(API_URL);
-    return response.data;
-  } catch (error) {
-    console.error("Error fetching destinations:", error);
-    return [];
+  getDestinationsByCategory: async (category) => {
+    try {
+      const response = await api.get(`/destinations/category/${category}`);
+      return response.data;
+    } catch (error) {
+      throw error.response?.data?.error || 'Failed to fetch destinations by category';
+    }
+  },
+
+  getPopularDestinations: async () => {
+    try destinationApi.getDestinationsByCategory('popular');
+  },
+
+  getInternationalDestinations: async () => {
+    return destinationApi.getDestinationsByCategory('international');
+  },
+
+  createDestination: async (destinationData) => {
+    try {
+      const response = await api.post('/destinations', destinationData);
+      return response.data;
+    } catch (error) {
+      throw error.response?.data?.error || 'Failed to create destination';
+    }
+  },
+
+  updateDestination: async (id, destinationData) => {
+    try {
+      const response = await api.put(`/destinations/${id}`, destinationData);
+      return response.data;
+    } catch (error) {
+      throw error.response?.data?.error || 'Failed to update destination';
+    }
+  },
+
+  deleteDestination: async (id) => {
+    try {
+      const response = await api.delete(`/destinations/${id}`);
+      return response.data;
+    } catch (error) {
+      throw error.response?.data?.error || 'Failed to delete destination';
+    }
   }
 };
+
+export default destinationApi;

@@ -1,59 +1,30 @@
-import axios from 'axios';
-
-const API_BASE_URL = '/api/payments';
+import api from './api';
 
 const paymentApi = {
-  processPayment: async (paymentData) => {
+  initializePayment: async (paymentData) => {
     try {
-      const response = await axios.post(`${API_BASE_URL}/process`, paymentData);
+      const response = await api.post('/payments/initialize', paymentData);
       return response.data;
     } catch (error) {
-      throw error.response?.data?.message || 'Payment processing failed';
+      throw error.response?.data?.error || 'Payment initialization failed';
     }
   },
 
-  processMpesaPayment: async (mpesaData) => {
+  verifyPayment: async (reference) => {
     try {
-      const response = await axios.post(`${API_BASE_URL}/mpesa`, mpesaData);
+      const response = await api.get(`/payments/verify/${reference}`);
       return response.data;
     } catch (error) {
-      throw error.response?.data?.message || 'M-PESA payment failed';
-    }
-  },
-
-  processPayPalPayment: async (paypalData) => {
-    try {
-      const response = await axios.post(`${API_BASE_URL}/paypal`, paypalData);
-      return response.data;
-    } catch (error) {
-      throw error.response?.data?.message || 'PayPal payment failed';
-    }
-  },
-
-  processCardPayment: async (cardData) => {
-    try {
-      const response = await axios.post(`${API_BASE_URL}/card`, cardData);
-      return response.data;
-    } catch (error) {
-      throw error.response?.data?.message || 'Card payment failed';
+      throw error.response?.data?.error || 'Payment verification failed';
     }
   },
 
   getPaymentHistory: async () => {
     try {
-      const response = await axios.get(`${API_BASE_URL}/history`);
+      const response = await api.get('/payments/history');
       return response.data;
     } catch (error) {
-      throw error.response?.data?.message || 'Failed to get payment history';
-    }
-  },
-
-  verifyPayment: async (paymentId) => {
-    try {
-      const response = await axios.get(`${API_BASE_URL}/verify/${paymentId}`);
-      return response.data;
-    } catch (error) {
-      throw error.response?.data?.message || 'Payment verification failed';
+      throw error.response?.data?.error || 'Failed to get payment history';
     }
   }
 };

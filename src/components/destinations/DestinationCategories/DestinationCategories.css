@@ -1,0 +1,124 @@
+.destination-categories {
+    padding: 4rem 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+  
+  .destination-categories-header {
+    text-align: center;
+    margin-bottom: 3rem;
+  }
+  
+  .destination-categories-header h2 {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: #00695C;
+    margin-bottom: 1rem;
+  }
+  
+  .destination-categories-header p {
+    font-size: 1.1rem;
+    color: #666;
+    line-height: 1.6;
+    max-width: 600px;
+    margin: 0 auto;
+  }
+  
+  .destination-category-filters {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    margin-bottom: 3rem;
+    flex-wrap: wrap;
+  }
+  
+  .destination-category-filter {
+    padding: 0.75rem 1.5rem;
+    border: 2px solid #E0E0E0;
+    border-radius: 50px;
+    background: white;
+    color: #666;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  
+  /* === ADD FILTER ICON STYLES HERE === */
+  .filter-icon {
+    font-size: 1.1rem;
+    transition: transform 0.3s ease;
+  }
+  
+  .destination-category-filter:hover .filter-icon {
+    transform: scale(1.1);
+  }
+  
+  .destination-category-filter.active .filter-icon {
+    color: white;
+  }
+  /* === END OF FILTER ICON STYLES === */
+  
+  .destination-category-filter:hover {
+    border-color: #00695C;
+    color: #00695C;
+    transform: translateY(-2px);
+  }
+  
+  .destination-category-filter.active {
+    background: #00695C;
+    border-color: #00695C;
+    color: white;
+  }
+  
+  .destination-category-count {
+    background: rgba(255, 255, 255, 0.2);
+    padding: 0.25rem 0.5rem;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 600;
+  }
+  
+  .destination-category-filter.active .destination-category-count {
+    background: rgba(255, 255, 255, 0.3);
+  }
+  
+  /* Responsive Design */
+  @media (max-width: 768px) {
+    .destination-categories {
+      padding: 2rem 1rem;
+    }
+  
+    .destination-categories-header h2 {
+      font-size: 2rem;
+    }
+  
+    .destination-category-filters {
+      gap: 0.5rem;
+    }
+  
+    .destination-category-filter {
+      padding: 0.6rem 1.2rem;
+      font-size: 0.9rem;
+    }
+  
+    /* === ADD RESPONSIVE FILTER ICON STYLES === */
+    .filter-icon {
+      font-size: 1rem;
+    }
+    /* === END OF RESPONSIVE FILTER ICON STYLES === */
+    }
+  
+  @media (max-width: 480px) {
+    .destination-category-filters {
+      flex-direction: column;
+      align-items: center;
+    }
+  
+    .destination-category-filter {
+      width: 200px;
+      justify-content: center;
+    }
+  }
