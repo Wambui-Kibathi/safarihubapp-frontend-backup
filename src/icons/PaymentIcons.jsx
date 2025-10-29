@@ -1,3 +1,4 @@
+// TODO: Replace custom SVGs to match those of PayStack after integration
 import React from 'react';
 import { FaCreditCard, FaPaypal } from 'react-icons/fa';
 

@@ -30,8 +30,9 @@ export const PaymentProvider = ({ children }) => {
       let response;
       
       switch (selectedPaymentMethod) {
+        // TODO: Remove payment methods after PayStack works
         case 'mpesa':
-          response = await paymentApi.processMpesaPayment(paymentData);
+          response = await paymentApi.processMpesaPayment(paymentData); 
           break;
         case 'paypal':
           response = await paymentApi.processPayPalPayment(paymentData);

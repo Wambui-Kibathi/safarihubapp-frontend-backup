@@ -1,12 +1,12 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import { Outlet } from 'react-router-dom';
 import GuideNavbar from '@/components/guide/GuideNavbar/GuideNavbar';
 import Footer from '@/components/common/Footer/Footer';
-import { AuthContext } from '@/context/AuthContext';
+import { useAuth } from '@/context/AuthContext';
 import './GuideLayout.css';
 
 const GuideLayout = ({ children }) => {
-  const { user } = useContext(AuthContext) || {};
+  const { user } = useAuth();
 
   return (
     <div className="guide-layout">
