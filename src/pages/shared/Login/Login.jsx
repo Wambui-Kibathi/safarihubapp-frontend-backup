@@ -45,6 +45,10 @@ const Login = () => {
         throw new Error(result.message || 'Login failed');
       }
 
+      // Store authentication data
+      localStorage.setItem('token', result.token);
+      localStorage.setItem('user', JSON.stringify(result.user));
+
       // Use the auth context login method
       const loginResult = await login({
         email: formData.email,
@@ -52,14 +56,14 @@ const Login = () => {
       });
 
       if (loginResult.success) {
-        // Redirect based on user role
-        const userRole = loginResult.user.role;
+        // Redirect based on user role from login response
+        const userRole = result.user.role;
         if (userRole === 'admin') {
           navigate('/admin/dashboard');
         } else if (userRole === 'guide') {
           navigate('/guide/dashboard');
         } else {
-          navigate('/traveler/dashboard');
+          navigate('/traveler/dashboard'); // Default for travelers
         }
       }
     } catch (error) {

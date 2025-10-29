@@ -63,17 +63,44 @@ const Register = () => {
         throw new Error(result.message || 'Registration failed');
       }
 
-      // Use the auth context register method
-      await register({
+      // Auto-login after successful registration
+      const loginResponse = await fetch('http://localhost:5000/api/auth/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          email: formData.email,
+          password: formData.password
+        }),
+      });
+
+      const loginResult = await loginResponse.json();
+
+      if (!loginResponse.ok) {
+        throw new Error(loginResult.message || 'Auto-login failed');
+      }
+
+      // Store authentication data
+      localStorage.setItem('token', loginResult.token);
+      localStorage.setItem('user', JSON.stringify(loginResult.user));
+
+      // Update auth context
+      const loginContextResult = await login({
         email: formData.email,
         password: formData.password
       });
 
-      // Redirect based on role
-      if (formData.role.toLowerCase() === 'guide') {
-        navigate('/guide/dashboard');
-      } else {
-        navigate('/traveler/dashboard');
+      if (loginContextResult.success) {
+        // Redirect based on user role from login response
+        const userRole = loginResult.user.role;
+        if (userRole === 'guide') {
+          navigate('/guide/dashboard');
+        } else if (userRole === 'admin') {
+          navigate('/admin/dashboard');
+        } else {
+          navigate('/traveler/dashboard'); // Default for travelers
+        }
       }
     } catch (error) {
       setError(error.message);
