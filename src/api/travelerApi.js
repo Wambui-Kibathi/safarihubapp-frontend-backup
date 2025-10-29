@@ -1,59 +1,52 @@
-import axios from 'axios';
-
-const API_BASE_URL = '/api/travelers';
+import api from './api';
+import API_CONFIG from '../config/api';
 
 const travelerApi = {
-  getProfile: async () => {
+  getAllTravelers: async () => {
     try {
-      const response = await axios.get(`${API_BASE_URL}/profile`);
+      const response = await api.get(API_CONFIG.ENDPOINTS.TRAVELERS.LIST);
       return response.data;
     } catch (error) {
-      throw error.response?.data?.message || 'Failed to get profile';
+      throw error.response?.data?.error || 'Failed to fetch travelers';
     }
   },
 
-  updateProfile: async (profileData) => {
+  getTraveler: async (travelerId) => {
     try {
-      const response = await axios.put(`${API_BASE_URL}/profile`, profileData);
+      const response = await api.get(`${API_CONFIG.ENDPOINTS.TRAVELERS.DETAIL}/${travelerId}`);
       return response.data;
     } catch (error) {
-      throw error.response?.data?.message || 'Failed to update profile';
+      throw error.response?.data?.error || 'Failed to fetch traveler';
     }
   },
 
-  getBookings: async () => {
+  createTraveler: async (travelerData) => {
     try {
-      const response = await axios.get(`${API_BASE_URL}/bookings`);
+      const response = await api.post(API_CONFIG.ENDPOINTS.TRAVELERS.CREATE, travelerData);
       return response.data;
     } catch (error) {
-      throw error.response?.data?.message || 'Failed to get bookings';
+      throw error.response?.data?.error || 'Failed to create traveler';
     }
   },
 
-  createBooking: async (bookingData) => {
+  updateTraveler: async (travelerId, travelerData) => {
     try {
-      const response = await axios.post(`${API_BASE_URL}/bookings`, bookingData);
+      const response = await api.patch(`${API_CONFIG.ENDPOINTS.TRAVELERS.UPDATE}/${travelerId}`, travelerData);
       return response.data;
     } catch (error) {
-      throw error.response?.data?.message || 'Failed to create booking';
+      throw error.response?.data?.error || 'Failed to update traveler';
     }
   },
 
-  cancelBooking: async (bookingId) => {
+  getTravelerBookings: async (travelerId) => {
     try {
-      const response = await axios.delete(`${API_BASE_URL}/bookings/${bookingId}`);
-      return response.data;
+      // This would typically be a separate endpoint, but for now we'll use the general bookings endpoint
+      const response = await api.get(API_CONFIG.ENDPOINTS.BOOKINGS.LIST);
+      // Filter bookings for this traveler (this should ideally be done on the backend)
+      const travelerBookings = response.data.filter(booking => booking.traveler_id === travelerId);
+      return travelerBookings;
     } catch (error) {
-      throw error.response?.data?.message || 'Failed to cancel booking';
-    }
-  },
-
-  getTrips: async () => {
-    try {
-      const response = await axios.get(`${API_BASE_URL}/trips`);
-      return response.data;
-    } catch (error) {
-      throw error.response?.data?.message || 'Failed to get trips';
+      throw error.response?.data?.error || 'Failed to fetch traveler bookings';
     }
   }
 };

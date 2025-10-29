@@ -1,68 +1,52 @@
-import axios from 'axios';
-
-const API_BASE_URL = '/api/guides';
+import api from './api';
+import API_CONFIG from '../config/api';
 
 const guideApi = {
-  getProfile: async () => {
+  getAllGuides: async () => {
     try {
-      const response = await axios.get(`${API_BASE_URL}/profile`);
+      const response = await api.get(API_CONFIG.ENDPOINTS.GUIDES.LIST);
       return response.data;
     } catch (error) {
-      throw error.response?.data?.message || 'Failed to get profile';
+      throw error.response?.data?.error || 'Failed to fetch guides';
     }
   },
 
-  updateProfile: async (profileData) => {
+  getGuide: async (guideId) => {
     try {
-      const response = await axios.put(`${API_BASE_URL}/profile`, profileData);
+      const response = await api.get(`${API_CONFIG.ENDPOINTS.GUIDES.DETAIL}/${guideId}`);
       return response.data;
     } catch (error) {
-      throw error.response?.data?.message || 'Failed to update profile';
+      throw error.response?.data?.error || 'Failed to fetch guide';
     }
   },
 
-  getTrips: async () => {
+  createGuide: async (guideData) => {
     try {
-      const response = await axios.get(`${API_BASE_URL}/trips`);
+      const response = await api.post(API_CONFIG.ENDPOINTS.GUIDES.CREATE, guideData);
       return response.data;
     } catch (error) {
-      throw error.response?.data?.message || 'Failed to get trips';
+      throw error.response?.data?.error || 'Failed to create guide';
     }
   },
 
-  createTrip: async (tripData) => {
+  updateGuide: async (guideId, guideData) => {
     try {
-      const response = await axios.post(`${API_BASE_URL}/trips`, tripData);
+      const response = await api.patch(`${API_CONFIG.ENDPOINTS.GUIDES.UPDATE}/${guideId}`, guideData);
       return response.data;
     } catch (error) {
-      throw error.response?.data?.message || 'Failed to create trip';
+      throw error.response?.data?.error || 'Failed to update guide';
     }
   },
 
-  updateTrip: async (tripId, tripData) => {
+  getGuideBookings: async (guideId) => {
     try {
-      const response = await axios.put(`${API_BASE_URL}/trips/${tripId}`, tripData);
-      return response.data;
+      // This would typically be a separate endpoint, but for now we'll use the general bookings endpoint
+      const response = await api.get(API_CONFIG.ENDPOINTS.BOOKINGS.LIST);
+      // Filter bookings for this guide (this should ideally be done on the backend)
+      const guideBookings = response.data.filter(booking => booking.guide_id === guideId);
+      return guideBookings;
     } catch (error) {
-      throw error.response?.data?.message || 'Failed to update trip';
-    }
-  },
-
-  deleteTrip: async (tripId) => {
-    try {
-      const response = await axios.delete(`${API_BASE_URL}/trips/${tripId}`);
-      return response.data;
-    } catch (error) {
-      throw error.response?.data?.message || 'Failed to delete trip';
-    }
-  },
-
-  getBookings: async () => {
-    try {
-      const response = await axios.get(`${API_BASE_URL}/bookings`);
-      return response.data;
-    } catch (error) {
-      throw error.response?.data?.message || 'Failed to get bookings';
+      throw error.response?.data?.error || 'Failed to fetch guide bookings';
     }
   }
 };

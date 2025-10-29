@@ -6,7 +6,7 @@ const uploadService = {
     formData.append('image', file);
 
     try {
-      const response = await api.post('/api/upload/profile', formData, {
+      const response = await api.post(API_CONFIG.ENDPOINTS.UPLOAD.PROFILE_IMAGE, formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },
@@ -22,7 +22,7 @@ const uploadService = {
     formData.append('image', file);
 
     try {
-      const response = await api.post('/api/upload/destination', formData, {
+      const response = await api.post(API_CONFIG.ENDPOINTS.UPLOAD.DESTINATION_IMAGE, formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },

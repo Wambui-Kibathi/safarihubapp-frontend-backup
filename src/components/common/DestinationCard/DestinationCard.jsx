@@ -1,9 +1,17 @@
 import React from 'react';
-import Card from '../Card/Card'; // import the generic card component
-import './DestinationCard.css'; // import the Card specific styles
+import { useNavigate } from 'react-router-dom';
+import { FaMapMarkerAlt, FaDollarSign, FaInfoCircle } from 'react-icons/fa';
+import Card from '../Card/Card';
+import './DestinationCard.css';
 
 const DestinationCard = ({ destination, onClick }) => {
-  const { name, country, price, image_url, description } = destination;
+  const navigate = useNavigate();
+  const { name, country, price, image_url, description, id } = destination;
+
+  const handleMoreInfo = (e) => {
+    e.stopPropagation();
+    navigate(`/destinations/${id}`);
+  };
 
   return (
     <Card
@@ -11,12 +19,26 @@ const DestinationCard = ({ destination, onClick }) => {
       title={name}
       description={description}
       onClick={onClick}
-      className="card-compact"
+      className="card-compact destination-card"
       imageAlt={name}
     >
-      <p style={{ fontWeight: '600', marginTop: '0.5rem' }}>
-        {country} • ${price}
-      </p>
+      <div className="destination-meta">
+        <div className="location-price">
+          <span className="location">
+            <FaMapMarkerAlt /> {country}
+          </span>
+          <span className="price">
+            <FaDollarSign /> ${price}
+          </span>
+        </div>
+        <button
+          onClick={handleMoreInfo}
+          className="more-info-btn"
+          title="View Details"
+        >
+          <FaInfoCircle /> More Info
+        </button>
+      </div>
     </Card>
   );
 };

@@ -1,9 +1,10 @@
 import api from './api';
+import API_CONFIG from '../config/api';
 
 const adminApi = {
   getUsers: async () => {
     try {
-      const response = await api.get('/admin/users');
+      const response = await api.get(API_CONFIG.ENDPOINTS.ADMIN.USERS);
       return response.data;
     } catch (error) {
       throw error.response?.data?.error || 'Failed to fetch users';
@@ -12,7 +13,7 @@ const adminApi = {
 
   updateUserRole: async (userId, role) => {
     try {
-      const response = await api.patch('/admin/assign-role', {
+      const response = await api.patch(API_CONFIG.ENDPOINTS.ADMIN.ASSIGN_ROLE, {
         user_id: userId,
         role: role
       });
@@ -24,7 +25,7 @@ const adminApi = {
 
   getBookings: async () => {
     try {
-      const response = await api.get('/admin/bookings');
+      const response = await api.get(API_CONFIG.ENDPOINTS.ADMIN.BOOKINGS);
       return response.data;
     } catch (error) {
       throw error.response?.data?.error || 'Failed to fetch bookings';
@@ -33,7 +34,7 @@ const adminApi = {
 
   getDashboardStats: async () => {
     try {
-      const response = await api.get('/admin/dashboard/stats');
+      const response = await api.get(API_CONFIG.ENDPOINTS.ADMIN.DASHBOARD);
       return response.data;
     } catch (error) {
       throw error.response?.data?.error || 'Failed to fetch dashboard stats';

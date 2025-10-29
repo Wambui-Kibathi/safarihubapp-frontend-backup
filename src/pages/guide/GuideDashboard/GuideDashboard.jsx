@@ -1,37 +1,111 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import { useAuth } from '../../../context/AuthContext';
+import guideApi from '../../../api/guideApi';
+import bookingApi from '../../../api/bookingApi';
+import { FaCalendarAlt, FaMapMarkerAlt, FaClock, FaCheckCircle, FaExclamationTriangle, FaDollarSign } from 'react-icons/fa';
 import './GuideDashboard.css';
 
 const GuideDashboard = () => {
-  const stats = {
-    tripsCreated: 12,
-    activeBookings: 8,
-    totalEarnings: '$4,200',
-    subscriptionPlan: 'Premium'
+  const { user } = useAuth();
+  const [guideProfile, setGuideProfile] = useState(null);
+  const [bookings, setBookings] = useState([]);
+  const [stats, setStats] = useState({
+    tripsCreated: 0,
+    activeBookings: 0,
+    totalEarnings: '$0',
+    subscriptionPlan: 'Free'
+  });
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    if (user) {
+      fetchDashboardData();
+    }
+  }, [user]);
+
+  const fetchDashboardData = async () => {
+    try {
+      setLoading(true);
+      setError(null);
+
+      // Fetch guide profile and bookings in parallel
+      const [profileData, bookingsData] = await Promise.all([
+        guideApi.getGuide(user.id),
+        guideApi.getGuideBookings(user.id)
+      ]);
+
+      setGuideProfile(profileData);
+      setBookings(bookingsData);
+
+      // Calculate stats from real data
+      const activeBookings = bookingsData.filter(b => b.status === 'confirmed' || b.status === 'pending').length;
+      const totalEarnings = bookingsData
+        .filter(b => b.status === 'completed')
+        .reduce((sum, booking) => sum + (booking.total_amount || 0), 0);
+
+      setStats({
+        tripsCreated: profileData.trips_created || 0,
+        activeBookings,
+        totalEarnings: `$${totalEarnings.toFixed(2)}`,
+        subscriptionPlan: profileData.subscription_plan || 'Free'
+      });
+    } catch (err) {
+      setError('Failed to load dashboard data');
+      console.error('Error fetching dashboard data:', err);
+    } finally {
+      setLoading(false);
+    }
   };
 
-  const recentBookings = [
-    {
-      id: 1,
-      tripTitle: 'Maasai Mara Safari',
-      travelerName: 'John Smith',
-      date: 'Dec 20, 2024',
-      status: 'Confirmed'
-    },
-    {
-      id: 2,
-      tripTitle: 'Mount Kenya Hiking',
-      travelerName: 'Emma Wilson',
-      date: 'Jan 5, 2025',
-      status: 'Pending'
+  const getStatusIcon = (status) => {
+    switch (status.toLowerCase()) {
+      case 'confirmed':
+        return <FaCheckCircle className="status-icon confirmed" />;
+      case 'pending':
+        return <FaClock className="status-icon pending" />;
+      case 'cancelled':
+        return <FaExclamationTriangle className="status-icon cancelled" />;
+      default:
+        return <FaClock className="status-icon" />;
     }
-  ];
+  };
+
+  const getStatusText = (status) => {
+    return status.charAt(0).toUpperCase() + status.slice(1);
+  };
+
+  if (loading) {
+    return (
+      <div className="guide-dashboard">
+        <div className="loading-container">
+          <div className="loading-spinner"></div>
+          <p>Loading your dashboard...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="guide-dashboard">
+        <div className="error-container">
+          <h2>Oops! Something went wrong</h2>
+          <p>{error}</p>
+          <button onClick={fetchDashboardData} className="retry-btn">
+            Try Again
+          </button>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="guide-dashboard">
       <div className="dashboard-container">
         <div className="welcome-section">
-          <h1 className="welcome-title">Welcome back, Guide!</h1>
+          <h1 className="welcome-title">Welcome back, {guideProfile?.full_name || user?.full_name || 'Guide'}!</h1>
           <p className="welcome-subtitle">Manage your trips and bookings</p>
         </div>
 
@@ -57,23 +131,34 @@ const GuideDashboard = () => {
         <div className="dashboard-content">
           <div className="recent-bookings">
             <h2 className="section-title">Recent Bookings</h2>
-            {recentBookings.length > 0 ? (
+            {bookings.length > 0 ? (
               <div className="bookings-list">
-                {recentBookings.map(booking => (
+                {bookings.slice(0, 5).map(booking => (
                   <div key={booking.id} className="booking-item">
                     <div className="booking-info">
-                      <h3 className="booking-title">{booking.tripTitle}</h3>
-                      <p className="booking-traveler">Traveler: {booking.travelerName}</p>
-                      <p className="booking-date">{booking.date}</p>
+                      <h3 className="booking-title">{booking.destination_name || `Trip #${booking.id}`}</h3>
+                      <p className="booking-traveler">Traveler: {booking.traveler_name || 'TBD'}</p>
+                      <p className="booking-date">
+                        <FaCalendarAlt /> {new Date(booking.start_date).toLocaleDateString()} - {new Date(booking.end_date).toLocaleDateString()}
+                      </p>
+                      <p className="booking-location">
+                        <FaMapMarkerAlt /> {booking.destination_country || 'Location TBD'}
+                      </p>
                     </div>
-                    <span className={`booking-status ${booking.status.toLowerCase()}`}>
-                      {booking.status}
-                    </span>
+                    <div className="booking-status">
+                      {getStatusIcon(booking.status)}
+                      <span>{getStatusText(booking.status)}</span>
+                    </div>
                   </div>
                 ))}
               </div>
             ) : (
-              <p className="no-bookings">No recent bookings</p>
+              <div className="no-bookings">
+                <p>No bookings yet. Create amazing trips to attract travelers!</p>
+                <Link to="/guide/trips/new" className="create-trip-btn">
+                  Create Your First Trip
+                </Link>
+              </div>
             )}
           </div>
 
@@ -89,7 +174,7 @@ const GuideDashboard = () => {
               <Link to="/guide/bookings" className="action-link">
                 View All Bookings
               </Link>
-              <Link to="/guide/profile" className="action-link">
+              <Link to="/profile" className="action-link">
                 Update Profile
               </Link>
             </div>

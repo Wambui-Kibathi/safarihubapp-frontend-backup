@@ -1,9 +1,10 @@
 import api from './api';
+import API_CONFIG from '../config/api';
 
 const destinationApi = {
   getAllDestinations: async () => {
     try {
-      const response = await api.get('/destinations');
+      const response = await api.get(API_CONFIG.ENDPOINTS.DESTINATIONS.LIST);
       return response.data;
     } catch (error) {
       throw error.response?.data?.error || 'Failed to fetch destinations';
@@ -12,7 +13,7 @@ const destinationApi = {
 
   getDestinationsByCategory: async (category) => {
     try {
-      const response = await api.get(`/destinations/category/${category}`);
+      const response = await api.get(`${API_CONFIG.ENDPOINTS.DESTINATIONS.BY_CATEGORY}/${category}`);
       return response.data;
     } catch (error) {
       throw error.response?.data?.error || 'Failed to fetch destinations by category';
@@ -21,7 +22,7 @@ const destinationApi = {
 
   getDestination: async (id) => {
     try {
-      const response = await api.get(`/destinations/${id}`);
+      const response = await api.get(`${API_CONFIG.ENDPOINTS.DESTINATIONS.DETAIL}/${id}`);
       return response.data;
     } catch (error) {
       throw error.response?.data?.error || 'Failed to fetch destination';
@@ -30,7 +31,7 @@ const destinationApi = {
 
   createDestination: async (destinationData) => {
     try {
-      const response = await api.post('/destinations', destinationData);
+      const response = await api.post(API_CONFIG.ENDPOINTS.DESTINATIONS.CREATE, destinationData);
       return response.data;
     } catch (error) {
       throw error.response?.data?.error || 'Failed to create destination';
@@ -39,7 +40,7 @@ const destinationApi = {
 
   updateDestination: async (id, destinationData) => {
     try {
-      const response = await api.put(`/destinations/${id}`, destinationData);
+      const response = await api.patch(`${API_CONFIG.ENDPOINTS.DESTINATIONS.UPDATE}/${id}`, destinationData);
       return response.data;
     } catch (error) {
       throw error.response?.data?.error || 'Failed to update destination';
@@ -48,7 +49,7 @@ const destinationApi = {
 
   deleteDestination: async (id) => {
     try {
-      const response = await api.delete(`/destinations/${id}`);
+      const response = await api.delete(`${API_CONFIG.ENDPOINTS.DESTINATIONS.DELETE}/${id}`);
       return response.data;
     } catch (error) {
       throw error.response?.data?.error || 'Failed to delete destination';

@@ -17,6 +17,7 @@ import Contact from '@/pages/shared/Contact/Contact';
 import Login from '@/pages/shared/Login/Login';
 import Register from '@/pages/shared/Register/Register';
 import DestinationsPage from '@/pages/shared/DestinationsPage/DestinationsPage';
+import DestinationDetails from '@/pages/shared/DestinationDetails/DestinationDetails';
 import UserProfile from '@/pages/shared/UserProfile/UserProfile'; // Single profile for all
 
 // NEW: Admin Pages
@@ -26,6 +27,7 @@ import AdminDashboard from '@/pages/admin/AdminDashboard';
 import TravelerDashboard from '@/pages/traveler/TravelerDashboard/TravelerDashboard';
 import TravelerExplore from '@/pages/traveler/TravelerExplore/TravelerExplore';
 import TravelerBookings from '@/pages/traveler/TravelerBookings/TravelerBookings';
+import BookingForm from '@/pages/traveler/BookingForm/BookingForm';
 
 // Guide Pages
 import GuideDashboard from '@/pages/guide/GuideDashboard/GuideDashboard';
@@ -56,6 +58,7 @@ const AppRouter = () => {
         <Route path="/about" element={<MainLayout><About /></MainLayout>} />
         <Route path="/contact" element={<MainLayout><Contact /></MainLayout>} />
         <Route path="/destinations" element={<MainLayout><DestinationsPage /></MainLayout>} />
+        <Route path="/destinations/:id" element={<DestinationDetails />} />
         <Route path="/login" element={<MainLayout><Login /></MainLayout>} />
         <Route path="/register" element={<MainLayout><Register /></MainLayout>} />
 
@@ -104,15 +107,24 @@ const AppRouter = () => {
           } 
         />
         
-        <Route 
-          path="/traveler/bookings" 
+        <Route
+          path="/traveler/bookings"
           element={
             <RoleProtectedRoute requiredRole="traveler">
               <TravelerLayout>
                 <TravelerBookings />
               </TravelerLayout>
             </RoleProtectedRoute>
-          } 
+          }
+        />
+
+        <Route
+          path="/booking/new/:destinationId"
+          element={
+            <RoleProtectedRoute requiredRole="traveler">
+              <BookingForm />
+            </RoleProtectedRoute>
+          }
         />
 
         {/* Guide Routes */}
