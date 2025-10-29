@@ -1,4 +1,6 @@
 .
+├── .env
+├── .gitignore
 ├── README.md
 ├── eslint.config.js
 ├── index.html
@@ -12,19 +14,77 @@
 │   ├── App.css
 │   ├── App.jsx
 │   ├── api
+│   │   ├── adminApi.js
+│   │   ├── api.js
 │   │   ├── authApi.js
+│   │   ├── bookingApi.js
+│   │   ├── destinationApi.js
 │   │   ├── guideApi.js
 │   │   ├── paymentApi.js
 │   │   └── travelerApi.js
 │   ├── assets
 │   │   ├── icons
 │   │   ├── images
+│   │   │   ├── hero-bg.jpg
+│   │   │   ├── kenya-safari.jpg
+│   │   │   ├── tanzania-adventure.jpg
+│   │   │   └── zanzibar-beach.jpg
 │   │   └── logos
 │   ├── components
 │   │   ├── common
+│   │   │   ├── Card
+│   │   │   │   ├── Card.css
+│   │   │   │   └── Card.jsx
+│   │   │   ├── DestinationCard
+│   │   │   │   ├── DestinationCard.css
+│   │   │   │   └── DestinationCard.jsx
+│   │   │   ├── Footer
+│   │   │   │   ├── Footer.css
+│   │   │   │   └── Footer.jsx
+│   │   │   ├── Navbar
+│   │   │   │   ├── Navbar.css
+│   │   │   │   └── Navbar.jsx
+│   │   │   ├── PayStackPayment
+│   │   │   │   ├── PayStackPayment.css
+│   │   │   │   └── PayStackPayment.jsx
+│   │   │   ├── ProfileImageUpload
+│   │   │   │   ├── ProfileImageUpload.css
+│   │   │   │   └── ProfileImageUpload.jsx
+│   │   │   └── ProtectedRoute
+│   │   │       ├── ProtectedRoute.css
+│   │   │       └── ProtectedRoute.jsx
+│   │   ├── destinations
+│   │   │   ├── DestinationCard
+│   │   │   │   ├── DestinationCard.css
+│   │   │   │   └── DestinationCard.jsx
+│   │   │   ├── DestinationCategories
+│   │   │   │   ├── DestinationCategories.css
+│   │   │   │   └── DestinationCategories.jsx
+│   │   │   └── DestinationGrid
+│   │   │       ├── DestinationGrid.css
+│   │   │       └── DestinationGrid.jsx
 │   │   ├── guide
-│   │   ├── payments
+│   │   │   ├── GuideCard
+│   │   │   │   ├── GuideCard.css
+│   │   │   │   └── GuideCard.jsx
+│   │   │   ├── GuideNavbar
+│   │   │   │   ├── GuideNavbar.css
+│   │   │   │   └── GuideNavbar.jsx
+│   │   │   └── TripForm
+│   │   │       ├── TripForm.css
+│   │   │       └── TripForm.jsx
 │   │   └── traveler
+│   │       ├── BookingForm
+│   │       │   ├── BookingForm.css
+│   │       │   └── BookingForm.jsx
+│   │       ├── TravelerCard
+│   │       │   ├── TravelerCard.css
+│   │       │   └── TravelerCard.jsx
+│   │       └── TravelerNavbar
+│   │           ├── TravelerNavbar.css
+│   │           └── TravelerNavbar.jsx
+│   ├── config
+│   │   └── api.js
 │   ├── context
 │   │   ├── AuthContext.jsx
 │   │   ├── PaymentContext.jsx
@@ -36,24 +96,97 @@
 │   ├── index.js
 │   ├── layouts
 │   │   ├── GuideLayout
+│   │   │   ├── GuideLayout.css
+│   │   │   └── GuideLayout.jsx
 │   │   ├── MainLayout
+│   │   │   ├── MainLayout.css
+│   │   │   └── MainLayout.jsx
 │   │   └── TravelerLayout
+│   │       ├── TravelerLayout.css
+│   │       └── TravelerLayout.jsx
 │   ├── main.jsx
 │   ├── pages
+│   │   ├── admin
+│   │   │   ├── AdminDashboard.css
+│   │   │   ├── AdminDashboard.jsx
+│   │   │   └── components
+│   │   │       ├── AdminLayout
+│   │   │       │   ├── AdminLayout.css
+│   │   │       │   └── AdminLayout.jsx
+│   │   │       ├── BookingManagement
+│   │   │       │   ├── BookingManagement.css
+│   │   │       │   └── BookingManagement.jsx
+│   │   │       ├── DashboardOverview
+│   │   │       │   ├── DashboardOverview.css
+│   │   │       │   └── DashboardOverview.jsx
+│   │   │       ├── DestinationManagement
+│   │   │       │   ├── DestinationManagement.css
+│   │   │       │   └── DestinationManagement.jsx
+│   │   │       └── UserManagement
+│   │   │           ├── UserManagement.css
+│   │   │           └── UserManagement.jsx
 │   │   ├── guide
+│   │   │   ├── GuideBookings
+│   │   │   │   ├── GuideBookings.css
+│   │   │   │   └── GuideBookings.jsx
+│   │   │   ├── GuideDashboard
+│   │   │   │   ├── GuideDashboard.css
+│   │   │   │   └── GuideDashboard.jsx
+│   │   │   └── GuideTrips
+│   │   │       ├── GuideTrips.css
+│   │   │       └── GuideTrips.jsx
 │   │   ├── shared
+│   │   │   ├── About
+│   │   │   │   ├── About.css
+│   │   │   │   └── About.jsx
+│   │   │   ├── Contact
+│   │   │   │   ├── Contact.css
+│   │   │   │   └── Contact.jsx
+│   │   │   ├── DestinationDetails
+│   │   │   │   ├── DestinationDetails.css
+│   │   │   │   └── DestinationDetails.jsx
+│   │   │   ├── DestinationsPage
+│   │   │   │   ├── DestinationsPage.css
+│   │   │   │   └── DestinationsPage.jsx
+│   │   │   ├── Home
+│   │   │   │   ├── Home.css
+│   │   │   │   └── Home.jsx
+│   │   │   ├── Login
+│   │   │   │   ├── Login.css
+│   │   │   │   └── Login.jsx
+│   │   │   ├── Register
+│   │   │   │   ├── Register.css
+│   │   │   │   └── Register.jsx
+│   │   │   └── UserProfile
+│   │   │       ├── UserProfile.css
+│   │   │       └── UserProfile.jsx
 │   │   └── traveler
+│   │       ├── BookingForm
+│   │       │   ├── BookingForm.css
+│   │       │   └── BookingForm.jsx
+│   │       ├── TravelerBookings
+│   │       │   ├── TravelerBookings.css
+│   │       │   └── TravelerBookings.jsx
+│   │       ├── TravelerDashboard
+│   │       │   ├── TravelerDashboard.css
+│   │       │   └── TravelerDashboard.jsx
+│   │       └── TravelerExplore
+│   │           ├── TravelerExplore.css
+│   │           └── TravelerExplore.jsx
 │   ├── routes
 │   │   ├── AppRouter.jsx
 │   │   └── PrivateRoutes.jsx
+│   ├── services
+│   │   └── uploadService.js
 │   ├── styles
 │   │   ├── globals.css
 │   │   └── pages.css
 │   └── utils
+│       ├── api.js
 │       ├── constants.js
 │       ├── helpers.js
 │       └── paymentUtils.js
 ├── structure.txt
 └── vite.config.js
 
-26 directories, 31 files
+66 directories, 124 files

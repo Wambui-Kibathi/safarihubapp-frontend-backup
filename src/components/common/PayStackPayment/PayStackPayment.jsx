@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import paymentApi from '../../api/paymentApi';
+import paymentApi from '../../../api/paymentApi';
 import './PayStackPayment.css';
 
 const PayStackPayment = ({ amount, bookingId, onSuccess, onClose }) => {
