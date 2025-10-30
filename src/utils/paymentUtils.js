@@ -1,10 +1,10 @@
 import { PAYMENT_METHODS } from './constants';
 
-// Format payment request data
-export const formatPaymentRequest = (paymentData, method) => {
+// Format payment request data for PayStack
+export const formatPaymentRequest = (paymentData, method = PAYMENT_METHODS.PAYSTACK) => {
   const baseRequest = {
     amount: paymentData.amount,
-    currency: paymentData.currency || 'USD',
+    currency: paymentData.currency || 'KES',
     description: paymentData.description || 'SafariHub Payment',
     metadata: {
       bookingId: paymentData.bookingId,
@@ -14,20 +14,13 @@ export const formatPaymentRequest = (paymentData, method) => {
   };
 
   switch (method) {
-    case PAYMENT_METHODS.MPESA:
+    case PAYMENT_METHODS.PAYSTACK:
       return {
         ...baseRequest,
-        phoneNumber: paymentData.phoneNumber,
-        accountReference: paymentData.bookingId || 'SAFARI',
-        transactionDesc: paymentData.description || 'SafariHub Booking Payment'
-      };
-
-    case PAYMENT_METHODS.PAYPAL:
-      return {
-        ...baseRequest,
-        returnUrl: paymentData.returnUrl || `${window.location.origin}/payment/success`,
-        cancelUrl: paymentData.cancelUrl || `${window.location.origin}/payment/cancel`,
-        payerEmail: paymentData.email
+        email: paymentData.email,
+        reference: paymentData.reference || generatePaymentReference(),
+        callback_url: paymentData.callbackUrl || `${window.location.origin}/payment/verify`,
+        channels: ['card', 'bank', 'ussd', 'qr', 'mobile_money', 'bank_transfer']
       };
 
     case PAYMENT_METHODS.CARD:
@@ -46,15 +39,22 @@ export const formatPaymentRequest = (paymentData, method) => {
   }
 };
 
-// Handle payment response
-export const handlePaymentResponse = (response, method) => {
+// Generate unique payment reference
+export const generatePaymentReference = () => {
+  const timestamp = Date.now();
+  const random = Math.random().toString(36).substring(2, 8);
+  return `SFH_${timestamp}_${random}`.toUpperCase();
+};
+
+// Handle payment response for PayStack
+export const handlePaymentResponse = (response, method = PAYMENT_METHODS.PAYSTACK) => {
   if (!response) {
     throw new Error('No response received from payment gateway');
   }
 
   const baseResponse = {
-    success: response.success || false,
-    transactionId: response.transactionId || response.id,
+    success: response.success || response.status === 'success',
+    transactionId: response.transactionId || response.reference,
     amount: response.amount,
     currency: response.currency,
     status: response.status,
@@ -62,20 +62,16 @@ export const handlePaymentResponse = (response, method) => {
   };
 
   switch (method) {
-    case PAYMENT_METHODS.MPESA:
+    case PAYMENT_METHODS.PAYSTACK:
       return {
         ...baseResponse,
-        mpesaReceiptNumber: response.mpesaReceiptNumber,
-        phoneNumber: response.phoneNumber,
-        checkoutRequestId: response.checkoutRequestId
-      };
-
-    case PAYMENT_METHODS.PAYPAL:
-      return {
-        ...baseResponse,
-        paypalTransactionId: response.paypalTransactionId,
-        payerEmail: response.payerEmail,
-        paymentUrl: response.paymentUrl
+        reference: response.reference,
+        gateway_response: response.gateway_response,
+        paid_at: response.paid_at,
+        created_at: response.created_at,
+        channel: response.channel,
+        customer: response.customer,
+        authorization: response.authorization
       };
 
     case PAYMENT_METHODS.CARD:
@@ -91,8 +87,8 @@ export const handlePaymentResponse = (response, method) => {
   }
 };
 
-// Handle payment errors
-export const handlePaymentError = (error, method) => {
+// Handle payment errors for PayStack
+export const handlePaymentError = (error, method = PAYMENT_METHODS.PAYSTACK) => {
   const baseError = {
     message: error.message || 'Payment failed',
     code: error.code || 'PAYMENT_ERROR',
@@ -100,21 +96,27 @@ export const handlePaymentError = (error, method) => {
     timestamp: new Date().toISOString()
   };
 
-  // Method-specific error handling
+  // PayStack-specific error handling
   switch (method) {
-    case PAYMENT_METHODS.MPESA:
+    case PAYMENT_METHODS.PAYSTACK:
       if (error.code === 'INSUFFICIENT_FUNDS') {
-        baseError.message = 'Insufficient funds in M-PESA account';
-      } else if (error.code === 'INVALID_PHONE') {
-        baseError.message = 'Invalid phone number format';
-      }
-      break;
-
-    case PAYMENT_METHODS.PAYPAL:
-      if (error.code === 'PAYMENT_CANCELLED') {
-        baseError.message = 'Payment was cancelled by user';
+        baseError.message = 'Insufficient funds in your account';
       } else if (error.code === 'INVALID_ACCOUNT') {
-        baseError.message = 'Invalid PayPal account';
+        baseError.message = 'Invalid account details';
+      } else if (error.code === 'PAYMENT_CANCELLED') {
+        baseError.message = 'Payment was cancelled';
+      } else if (error.code === 'CARD_DECLINED') {
+        baseError.message = 'Your card was declined';
+      } else if (error.code === 'INVALID_CARD') {
+        baseError.message = 'Invalid card details provided';
+      } else if (error.code === 'EXPIRED_CARD') {
+        baseError.message = 'Your card has expired';
+      } else if (error.code === 'INVALID_EXPIRY') {
+        baseError.message = 'Invalid card expiry date';
+      } else if (error.code === 'INVALID_CVV') {
+        baseError.message = 'Invalid CVV provided';
+      } else if (error.code === 'DUPLICATE_TRANSACTION') {
+        baseError.message = 'This transaction has already been processed';
       }
       break;
 
@@ -130,8 +132,8 @@ export const handlePaymentError = (error, method) => {
   return baseError;
 };
 
-// Validate payment data
-export const validatePaymentData = (paymentData, method) => {
+// Validate payment data for PayStack
+export const validatePaymentData = (paymentData, method = PAYMENT_METHODS.PAYSTACK) => {
   const errors = [];
 
   // Common validations
@@ -139,21 +141,16 @@ export const validatePaymentData = (paymentData, method) => {
     errors.push('Amount must be greater than 0');
   }
 
-  // Method-specific validations
+  // PayStack-specific validations
   switch (method) {
-    case PAYMENT_METHODS.MPESA:
-      if (!paymentData.phoneNumber) {
-        errors.push('Phone number is required for M-PESA');
-      } else if (!/^\+254\d{9}$/.test(paymentData.phoneNumber)) {
-        errors.push('Invalid M-PESA phone number format');
-      }
-      break;
-
-    case PAYMENT_METHODS.PAYPAL:
+    case PAYMENT_METHODS.PAYSTACK:
       if (!paymentData.email) {
-        errors.push('Email is required for PayPal');
+        errors.push('Email is required for payment');
       } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(paymentData.email)) {
         errors.push('Invalid email format');
+      }
+      if (!paymentData.reference) {
+        errors.push('Payment reference is required');
       }
       break;
 
@@ -176,10 +173,40 @@ export const validatePaymentData = (paymentData, method) => {
   return errors;
 };
 
-// Format amount for display
-export const formatPaymentAmount = (amount, currency = 'USD') => {
-  return new Intl.NumberFormat('en-US', {
+// Format amount for display (KES for PayStack)
+export const formatPaymentAmount = (amount, currency = 'KES') => {
+  return new Intl.NumberFormat('en-KE', {
     style: 'currency',
     currency: currency
   }).format(amount);
+};
+
+// Initialize PayStack payment
+export const initializePayStackPayment = (paymentData) => {
+  const publicKey = import.meta.env.VITE_PAYSTACK_PUBLIC_KEY || 'pk_test_your_paystack_public_key_here';
+
+  if (!window.PaystackPop) {
+    throw new Error('PayStack script not loaded');
+  }
+
+  const handler = window.PaystackPop.setup({
+    key: publicKey,
+    email: paymentData.email,
+    amount: paymentData.amount * 100, // Convert to kobo
+    currency: paymentData.currency || 'KES',
+    ref: paymentData.reference || generatePaymentReference(),
+    callback: (response) => {
+      if (paymentData.onSuccess) {
+        paymentData.onSuccess(response);
+      }
+    },
+    onClose: () => {
+      if (paymentData.onClose) {
+        paymentData.onClose();
+      }
+    },
+    metadata: paymentData.metadata || {}
+  });
+
+  return handler;
 };

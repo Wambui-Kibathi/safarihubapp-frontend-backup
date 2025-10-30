@@ -38,8 +38,7 @@ export const USER_ROLES = {
 
 // Payment Methods
 export const PAYMENT_METHODS = {
-  MPESA: 'mpesa',
-  PAYPAL: 'paypal',
+  PAYSTACK: 'paystack',
   CARD: 'card'
 };
 
