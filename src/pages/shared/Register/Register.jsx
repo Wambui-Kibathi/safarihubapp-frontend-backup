@@ -5,7 +5,7 @@ import './Register.css';
 
 const Register = () => {
   const navigate = useNavigate();
-  const { register } = useAuth();
+  const { setUser, setIsAuthenticated } = useAuth();
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -85,23 +85,18 @@ const Register = () => {
       localStorage.setItem('token', loginResult.token);
       localStorage.setItem('user', JSON.stringify(loginResult.user));
 
-      // Update auth context
-      const loginContextResult = await login({
-        email: formData.email,
-        password: formData.password
-      });
+      // Update auth context by setting the user data directly
+      // Since we already have the user data from login response, set it in context
+      const userData = loginResult.user;
+      localStorage.setItem('user', JSON.stringify(userData));
 
-      if (loginContextResult.success) {
-        // Redirect based on user role from login response
-        const userRole = loginResult.user.role;
-        if (userRole === 'guide') {
-          navigate('/guide/dashboard');
-        } else if (userRole === 'admin') {
-          navigate('/admin/dashboard');
-        } else {
-          navigate('/traveler/dashboard'); // Default for travelers
-        }
-      }
+      // Update context state directly
+      setUser(userData);
+      setIsAuthenticated(true);
+
+      // Redirect to homepage (main destinations page) for all users after registration
+      // This provides a better UX - users can explore destinations immediately
+      navigate('/');
     } catch (error) {
       setError(error.message);
     } finally {
