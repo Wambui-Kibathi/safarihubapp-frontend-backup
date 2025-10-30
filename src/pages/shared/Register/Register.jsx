@@ -5,7 +5,7 @@ import './Register.css';
 
 const Register = () => {
   const navigate = useNavigate();
-  const { setUser, setIsAuthenticated } = useAuth();
+  const { login } = useAuth();
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -81,18 +81,15 @@ const Register = () => {
         throw new Error(loginResult.message || 'Auto-login failed');
       }
 
-      // Store authentication data
-      localStorage.setItem('token', loginResult.token);
-      localStorage.setItem('user', JSON.stringify(loginResult.user));
+      // Use the login function from AuthContext to properly handle authentication
+      const loginContextResult = await login({
+        email: formData.email,
+        password: formData.password
+      });
 
-      // Update auth context by setting the user data directly
-      // Since we already have the user data from login response, set it in context
-      const userData = loginResult.user;
-      localStorage.setItem('user', JSON.stringify(userData));
-
-      // Update context state directly
-      setUser(userData);
-      setIsAuthenticated(true);
+      if (!loginContextResult.success) {
+        throw new Error(loginContextResult.error || 'Auto-login failed');
+      }
 
       // Redirect to homepage (main destinations page) for all users after registration
       // This provides a better UX - users can explore destinations immediately
