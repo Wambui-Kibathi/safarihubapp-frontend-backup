@@ -5,7 +5,7 @@ import './Register.css';
 
 const Register = () => {
   const navigate = useNavigate();
-  const { login } = useAuth();
+  const { setUser, setIsAuthenticated } = useAuth();
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -63,37 +63,38 @@ const Register = () => {
         throw new Error(result.message || 'Registration failed');
       }
 
-      // Auto-login after successful registration
-      const loginResponse = await fetch('http://localhost:5000/api/auth/login', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          email: formData.email,
-          password: formData.password
-        }),
-      });
-
-      const loginResult = await loginResponse.json();
-
-      if (!loginResponse.ok) {
-        throw new Error(loginResult.message || 'Auto-login failed');
+      // Store the JWT token from registration response
+      if (result.token) {
+        localStorage.setItem('token', result.token);
       }
 
-      // Use the login function from AuthContext to properly handle authentication
-      const loginContextResult = await login({
-        email: formData.email,
-        password: formData.password
-      });
-
-      if (!loginContextResult.success) {
-        throw new Error(loginContextResult.error || 'Auto-login failed');
+      // Store user data from registration response
+      if (result.user) {
+        localStorage.setItem('user', JSON.stringify(result.user));
       }
 
-      // Redirect to homepage (main destinations page) for all users after registration
-      // This provides a better UX - users can explore destinations immediately
-      navigate('/');
+      // Update AuthContext state directly
+      const { setUser, setIsAuthenticated } = useAuth();
+      if (result.user) {
+        setUser(result.user);
+        setIsAuthenticated(true);
+      }
+
+      // Role-based navigation after successful registration
+      const userRole = result.user?.role || formData.role.toLowerCase();
+      switch(userRole) {
+        case "traveler":
+          navigate("/traveler/dashboard");
+          break;
+        case "guide":
+          navigate("/guide/dashboard");
+          break;
+        case "admin":
+          navigate("/admin/dashboard");
+          break;
+        default:
+          navigate("/");
+      }
     } catch (error) {
       setError(error.message);
     } finally {

@@ -14,7 +14,17 @@ const authApi = {
   register: async (userData) => {
     try {
       const response = await api.post(API_CONFIG.ENDPOINTS.AUTH.REGISTER, userData);
-      return response.data;
+      const data = response.data;
+
+      // Store token and user data if provided in response
+      if (data.token) {
+        localStorage.setItem('token', data.token);
+      }
+      if (data.user) {
+        localStorage.setItem('user', JSON.stringify(data.user));
+      }
+
+      return data;
     } catch (error) {
       throw error.response?.data?.message || 'Registration failed';
     }
